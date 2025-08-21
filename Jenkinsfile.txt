@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+    
+    environment {
+        LT_USERNAME = credentials('lambdatest-username')
+        LT_ACCESS_KEY = credentials('lambdatest-access-key')
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', 
+                url: 'https://github.com/rashyamgupta/TestByRSG.git'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/**/*.xml'
+                }
+            }
+        }
+        
+        stage('Publish Results') {
+            steps {
+                // Optional: Publish results to LambdaTest
+                script {
+                    def buildName = "Build ${env.BUILD_NUMBER}"
+                    sh "curl --user ${env.LT_USERNAME}:${env.LT_ACCESS_KEY} \\
+                    --header 'Content-Type: application/json' \\
+                    --data '{\"name\":\"${buildName}\",\"build_number\":\"${env.BUILD_NUMBER}\"}' \\
+                    https://api.lambdatest.com/automation/api/v1/builds"
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            // Clean up workspace
+            cleanWs()
+        }
+        success {
+            slackSend channel: '#automation-tests',
+                color: 'good',
+                message: "LambdaTest Build ${env.BUILD_NUMBER} succeeded: ${env.BUILD_URL}"
+        }
+        failure {
+            slackSend channel: '#automation-tests',
+                color: 'danger',
+                message: "LambdaTest Build ${env.BUILD_NUMBER} failed: ${env.BUILD_URL}"
+        }
+    }
+}
