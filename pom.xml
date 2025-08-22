@@ -16,7 +16,7 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<selenium.version>4.35.0</selenium.version>
 		<testng.version>7.11.0</testng.version>
-		<maven-surefire-plugin.version>3.0.0-M9</maven-surefire-plugin.version>
+		<maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -34,6 +34,11 @@
 			<version>${testng.version}</version>
 			<scope>test</scope>
 		</dependency>
+			<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-devtools-v139</artifactId>
+			<version>4.35.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -46,10 +51,6 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
-					<systemPropertyVariables>
-						<LT_USERNAME>${LT_USERNAME}</LT_USERNAME>
-						<LT_ACCESS_KEY>${LT_ACCESS_KEY}</LT_ACCESS_KEY>
-					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 		</plugins>

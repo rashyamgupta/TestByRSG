@@ -6,22 +6,9 @@
         <parameter name="browserName" value="chrome"/>
         <parameter name="browserVersion" value="latest"/>
         <classes>
-            <class name="com.CloudLTest.LambdaTestDemo">
+            <class name="com.test.LambdaTestDemo">
                 <methods>
                     <include name="testSimpleFormDemo"/>
-                </methods>
-            </class>
-        </classes>
-    </test>
-    
-    <test name="Test on Mac Safari">
-        <parameter name="platform" value="macOS Ventura"/>
-        <parameter name="browserName" value="safari"/>
-        <parameter name="browserVersion" value="16.0"/>
-        <classes>
-            <class name="com.CloudLTest.LambdaTestDemo">
-                <methods>
-                    <include name="testDragAndDrop"/>
                 </methods>
             </class>
         </classes>

@@ -1,6 +1,10 @@
 package com.test;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterMethod;
@@ -10,48 +14,44 @@ import org.testng.annotations.Parameters;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 public class TestBase {
-    protected WebDriver driver;
-    protected String platform;
-    protected String browserName;
-    protected String browserVersion;
-    
-    public static final String LT_USERNAME = System.getenv("LT_USERNAME");
-    public static final String LT_ACCESS_KEY = System.getenv("LT_ACCESS_KEY");
-    public static final String GRID_URL = "hub.lambdatest.com/wd/hub";
-    
-    @BeforeMethod
-    @Parameters({"platform", "browserName", "browserVersion"})
-    public void setUp(String platform, String browserName, String browserVersion) 
-            throws MalformedURLException {
-        this.platform = platform;
-        this.browserName = browserName;
-        this.browserVersion = browserVersion;
-        
+	protected String platform;
+	protected String browserName;
+	protected String browserVersion;
+
+	public static String hubURL = "https://hub.lambdatest.com/wd/hub";
+	protected WebDriver driver;
+
+	@BeforeMethod
+	@Parameters({ "platform", "browserName", "browserVersion" })
+	public void setUp(String platform, String browserName, String browserVersion) throws MalformedURLException {
+		this.platform = platform;
+		this.browserName = browserName;
+		this.browserVersion = browserVersion;
+
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("platform", platform);
-        capabilities.setCapability("browserName", browserName);
-        capabilities.setCapability("version", browserVersion);
-        capabilities.setCapability("build", "LambdaTest Jenkins Integration");
-        capabilities.setCapability("name", "Test on " + platform + " " + browserName);
-        capabilities.setCapability("network", true);
-        capabilities.setCapability("visual", true);
-        capabilities.setCapability("video", true);
-        capabilities.setCapability("console", true);
-        
-        // LambdaTest Capabilities
-        capabilities.setCapability("user", LT_USERNAME);
-        capabilities.setCapability("accessKey", LT_ACCESS_KEY);
-        
-        String gridURL = "https://" + LT_USERNAME + ":" + LT_ACCESS_KEY + "@" + GRID_URL;
-        driver = new RemoteWebDriver(new URL(gridURL), capabilities);
-    }
-    
-    @AfterMethod
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
+        capabilities.setCapability("browserName", "Chrome");
+        capabilities.setCapability("browserVersion", "139");
+        Map<String, Object> ltOptions = new HashMap<>();
+        ltOptions.put("username", "rashyamgupta");
+        ltOptions.put("accessKey", "LT_uNi2oRzGfunSRz22T01EqD9GR7EzOPJ3Pdha3hBWw0AneQ8");
+        ltOptions.put("build", "Selenium 4");
+        ltOptions.put("name", this.getClass().getName());
+        ltOptions.put("platformName", "Windows 10");
+        ltOptions.put("seCdp", true);
+        ltOptions.put("selenium_version", "4.23.0");
+        capabilities.setCapability("LT:Options", ltOptions);
+
+        driver = new RemoteWebDriver(new URL(hubURL), capabilities);
+        System.out.println(driver);
+	}
+
+	@AfterMethod
+	public void tearDown() {
+		if (driver != null) {
+			driver.quit();
+		}
+	}
 }
