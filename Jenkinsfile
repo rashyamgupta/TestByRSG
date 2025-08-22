@@ -31,18 +31,6 @@ pipeline {
             }
         }
         
-        stage('Publish Results') {
-            steps {
-                // Optional: Publish results to LambdaTest
-                script {
-                    def buildName = "Build ${env.BUILD_NUMBER}"
-                    sh "curl --user ${env.LT_USERNAME}:${env.LT_ACCESS_KEY} \\
-                    --header 'Content-Type: application/json' \\
-                    --data '{\"name\":\"${buildName}\",\"build_number\":\"${env.BUILD_NUMBER}\"}' \\
-                    https://api.lambdatest.com/automation/api/v1/builds"
-                }
-            }
-        }
     }
     
     post {
