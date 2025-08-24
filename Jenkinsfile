@@ -11,6 +11,14 @@ pipeline {
             steps {
                 git branch: 'master', 
                 url: 'https://github.com/rashyamgupta/TestByRSG.git'
+                    // Email configuration as environment variables
+                SMTP_SERVER = 'smtp.gmail.com'
+                SMTP_PORT = '587'
+                SMTP_USE_TLS = 'false'
+                SMTP_USE_SSL = 'true'
+                EMAIL_RECIPIENTS = 'rashyam.gupta@gmail.com'
+                BUILD_TAG = "build-${env.BUILD_NUMBER}"
+                EMAIL_PRIORITY="High";
             }
         }
         
