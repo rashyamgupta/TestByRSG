@@ -4,14 +4,7 @@ pipeline {
     environment {
         LT_USERNAME = credentials('lambdatest-username')
         LT_ACCESS_KEY = credentials('lambdatest-access-key')
-    }
-    
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'master', 
-                url: 'https://github.com/rashyamgupta/TestByRSG.git'
-                    // Email configuration as environment variables
+        // Email configuration as environment variables
                 SMTP_SERVER = 'smtp.gmail.com'
                 SMTP_PORT = '587'
                 SMTP_USE_TLS = 'false'
@@ -19,6 +12,14 @@ pipeline {
                 EMAIL_RECIPIENTS = 'rashyam.gupta@gmail.com'
                 BUILD_TAG = "build-${env.BUILD_NUMBER}"
                 EMAIL_PRIORITY="High";
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master', 
+                url: 'https://github.com/rashyamgupta/TestByRSG.git'
+                    
             }
         }
         
